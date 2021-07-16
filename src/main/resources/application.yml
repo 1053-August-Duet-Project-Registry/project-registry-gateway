@@ -10,7 +10,7 @@ spring:
         service-id: config
 
     consul:
-      host: consul
+      host: localhost
       port: 8500
       discovery:
         prefer-ip-address: true
@@ -29,7 +29,7 @@ spring:
             - content-type
       routes:
         - id: account
-          uri: http://localhost:8081/
+          uri: https://account:8081/
           predicates:
             - Path=/api/account/**
         

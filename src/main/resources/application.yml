@@ -29,16 +29,16 @@ spring:
             - content-type
       routes:
         - id: account
-          uri: https://account:8081/
+          uri: lb://account-microservice
           predicates:
             - Path=/api/account/**
         
         - id: project
-          uri: http://localhost:8082/
+          uri: lb://project-microservice
           predicates:
             - Path=/api/project/**, /api/organization/**, /api/tag/**
         
         - id: tracking
-          uri: http://localhost:8083/
+          uri: lb://tracking-microservice
           predicates:
             - Path=/api/status**, /api/phase/**,/api/iteration/**

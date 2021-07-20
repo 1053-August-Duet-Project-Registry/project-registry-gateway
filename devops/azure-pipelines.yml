@@ -19,11 +19,11 @@ pr:
 - branch-dev
 - main
 
-# These variable groups are required for sonarCloud and Discord secrets to be
-# available in the analysis template
 pool:
   vmImage: ubuntu-latest
 
+# These variable groups are required for sonarCloud and Discord secrets to be
+# available in the analysis template
 variables:
 - group: project-registry-sonarcloud
 - group: project-registry-discord

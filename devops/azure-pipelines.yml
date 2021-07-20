@@ -19,16 +19,6 @@ pool:
 variables:
 - group: project-registry-sonarcloud
 - group: project-registry-discord
-- name: microservice
-  value: "gateway"
-- name: coveragePath
-  value: "src/main/java/com/revature"
-- name: workDir
-  value: "./"
-- name: maven
-  value: true
-- name: angular
-  value: false
 
 stages:
 - stage: build
@@ -41,6 +31,7 @@ stages:
     - template: ./templates/analysis.yml@templates
       parameters:
         microservice: gateway
+        workDir: ./project-registry-gateway/
 
     displayName: Analyze --> Job
 

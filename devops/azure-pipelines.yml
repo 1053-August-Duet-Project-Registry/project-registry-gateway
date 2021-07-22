@@ -39,8 +39,8 @@ pool:
 variables:
 - group: project-registry-sonarcloud
 - group: project-registry-discord
-- name: version
-  value: undefined
+# - name: version
+#   value: undefined
 
 stages:
 - stage: analyze

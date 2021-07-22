@@ -39,19 +39,11 @@ pool:
 variables:
 - group: project-registry-sonarcloud
 - group: project-registry-discord
-- name: microservice
-  value: gateway
 - name: version
   value: undefined
-- name: containerRepo
-  value: jpbulloch5
-- name: containerServiceConnection
-  value: 'Jacob''s Docker Hub'
-- name: containerUrl
-  value: https://hub.docker.com/repository/docker/jpbulloch5/project-registry-gateway
 
 stages:
-- stage: build
+- stage: analyze
   jobs:
   - job: analyze
 
@@ -71,60 +63,25 @@ stages:
 
     displayName: Analyze --> Job
 
+  displayName: Analyze --> Stage
+
+- stage: dockerize
+  dependsOn: [] # <-- run concurrent with analyze stage
+  jobs:
   - job: dockerize
     steps:
     - checkout: self
     - checkout: templates
 
-    - script: |
-      displayName: Install mvn-version dependencies --> Task
-    
-    - script: |
-        sudo apt-get install zsh -y
-        sudo apt-get install xmlstarlet -y
-        sudo bash autogen.sh
-        sudo ./configure
-        sudo make
-        sudo make install
-      workingDirectory: $(Build.SourcesDirectory)/project-registry-devops/tools/mvn-version-1.2.1
-      displayName: Install mvn-version --> Task
-      
-    - script: |
-        VERSION=$(mvn-version .)
-        echo extracted $VERSION
-        echo "##vso[task.setvariable variable=version]$VERSION"
-        echo exported version: $(version)
-      workingDirectory: $(Build.SourcesDirectory)/project-registry-${{ variables.microservice }} 
-      displayName: Extract microservice version from pom.xml file --> Task
-
-    - task: Docker@2
-      inputs:
-        containerRegistry: ${{ variables.containerServiceConnection }}
-        repository: '${{ variables.containerRepo }}/project-registry-${{ variables.microservice }}'
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
-        tags: '$(version)'
-      displayName: Dockerize ${{ variables.microservice }} and push --> Task
-    
-    - task: ado-discord-webhook@1
-      inputs:
-        channelId: '$(discordDockerChannel)'
-        webhookKey: '$(discordDockerKey)'
-        name: '$(System.TeamProject) - Docker'
-        avatar: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn3.iconfinder.com%2Fdata%2Ficons%2Flogos-and-brands-adobe%2F512%2F97_Docker-512.png&f=1&nofb=1'
-        messageType: 'content'
-        content: |
-          **__Dockerization Report__**
-          **Status:** $(Agent.JobStatus)
-          **Branch:** $(Build.SourceBranch)
-          **Trigger:** $(Build.Reason)
-          **Message:** $(Build.SourceVersionMessage)
-          **Image:** project-registry-${{ variables.microservice }}:$(version)
-          **Container Repo:** <${{ variables.containerUrl }}>
-          **Logs:** <$(System.CollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)&view=logs>
-          **Repo:** <$(Build.Repository.Uri)/tree/$(Build.SourceBranchName)>
+    - template: ./templates/dockerize.yml@templates
+      parameters:
+        imageName: project-registry-gateway
+        containerRepo: jpbulloch5
+        containerServiceConnection: 'Jacob''s Docker Hub'
+        containerUrl: https://hub.docker.com/repository/docker/jpbulloch5/project-registry-gateway
+        mvnVersionDir: ./project-registry-devops/tools/mvn-version-1.2.1
 
     displayName: Dockerize --> Job
 
-  displayName: Build --> Stage
+  displayName: Dockerize --> Stage
 

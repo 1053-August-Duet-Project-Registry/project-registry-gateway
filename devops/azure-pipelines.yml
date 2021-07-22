@@ -66,18 +66,15 @@ stages:
 - stage: dockerize
   dependsOn: [] # <-- run concurrent with analyze stage; does not depend on it
   jobs:
+  
   - job: dockerize
     steps:
-    - checkout: self
-    - checkout: templates
-
     - template: ./templates/dockerize.yml@templates
       parameters:
         imageName: project-registry-gateway
         containerRepo: jpbulloch5
         containerServiceConnection: 'Jacob''s Docker Hub'
         containerUrl: https://hub.docker.com/repository/docker/jpbulloch5/project-registry-gateway
-        mvnVersionDir: ./project-registry-devops/tools/mvn-version-1.2.1
         discordChannel: $(discordDockerChannel)
         discordKey: $(discordDockerKey)
         

@@ -46,12 +46,9 @@ stages:
   - job: analyze
 
     steps:
-    - checkout: self
-    - checkout: templates
     - template: ./templates/analysis.yml@templates
       parameters:
         microservice: gateway
-        workDir: ./project-registry-gateway/
         sonarKeyPrefix: $(sonarKeyPrefix)
         sonarNamePrefix: $(sonarNamePrefix)
         sonarOrg: $(sonarOrg)

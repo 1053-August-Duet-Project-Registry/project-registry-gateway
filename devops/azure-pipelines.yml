@@ -7,7 +7,7 @@ resources:
     type: github
     endpoint: Team1-Project3
     name: 1053-August-Duet-Project-Registry/project-registry-devops
-    ref: refs/heads/branch-dev
+    ref: refs/heads/feature-dockerpipe
 
 # This pipeline will trigger on commits or pull-requests made to the branch-dev 
 # or main branches.  Note that complete static analysis with SonarCloud is only 
@@ -71,38 +71,39 @@ stages:
     - checkout: templates
 
     - script: |
-        pwd && ls
-        echo
-        cd project-registry-devops && pwd && ls
-        cd tools && pwd && ls
-        cd mvn-version-1.2.1 && pwd && ls
-      displayName: explore filestructure
-
-    # - script: |
-    #     sudo apt-get install zsh -y
-    #     sudo apt-get install xmlstarlet -y
-    #   displayName: Install mvn-version dependencies --> Task
+        sudo apt-get install zsh -y
+        sudo apt-get install xmlstarlet -y
+      displayName: Install mvn-version dependencies --> Task
     
-    # - script: |
-    #     cd $(Build.SourcesDirectory)/project-registry-devops/tools/mvn-version-1.2.1
-    #     sudo bash autogen.sh
-    #     sudo ./configure
-    #     sudo make
-    #     sudo make install
-    #   workingDirectory: $(Build.SourcesDirectory)/project-registry-devops/tools/mvn-version-1.2.1
-    #   displayName: Install mvn-version --> Task
+    - script: |
+        cd $(Build.SourcesDirectory)/project-registry-devops/tools/mvn-version-1.2.1
+        sudo bash autogen.sh
+        sudo ./configure
+        sudo make
+        sudo make install
+      workingDirectory: $(Build.SourcesDirectory)/project-registry-devops/tools/mvn-version-1.2.1
+      displayName: Install mvn-version --> Task
       
-    # - script: |
-    #     VERSION=$(mvn-version .)
-    #     echo extracted $VERSION
-    #     echo "##vso[task.setvariable variable=version]$VERSION"
-    #     echo exported version: $(version)
-    #   workingDirectory: cd $(Build.SourcesDirectory)/project-registry-${{ variables.microservice }} 
-    #   displayName: Extract microservice version from pom.xml file --> Task
+    - script: |
+        VERSION=$(mvn-version .)
+        echo extracted $VERSION
+        echo "##vso[task.setvariable variable=version]$VERSION"
+        echo exported version: $(version)
+      workingDirectory: $(Build.SourcesDirectory)/project-registry-${{ variables.microservice }} 
+      displayName: Extract microservice version from pom.xml file --> Task
 
-    # - script: |
-    #     echo imported version: $(version)
-    #   displayName: Show cross-script version imported --> Task
+    - script: |
+        echo imported version: $(version)
+      displayName: Show cross-script version imported --> Task
+
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Jacob''s Docker Hub'
+        repository: 'project-registry-${{ variables.microservice }}'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: '$(version)'
+      displayName: Dockerize ${{ variables.microservice }}
 
     displayName: Dockerize --> Job
 

@@ -96,6 +96,15 @@ stages:
         echo imported version: $(version)
       displayName: Show cross-script version imported --> Task
 
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Jacob''s Docker Hub'
+        repository: 'project-registry-${{ variables.microservice }}'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: '$(version)'
+      displayName: Dockerize ${{ variables.microservice }}
+
     displayName: Dockerize --> Job
 
   displayName: Build --> Stage

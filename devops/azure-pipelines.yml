@@ -80,7 +80,9 @@ stages:
         containerServiceConnection: 'Jacob''s Docker Hub'
         containerUrl: https://hub.docker.com/repository/docker/jpbulloch5/project-registry-gateway
         mvnVersionDir: ./project-registry-devops/tools/mvn-version-1.2.1
-
+        discordChannel: $(discordDockerChannel)
+        discordKey: $(discordDockerKey)
+        
     displayName: Dockerize --> Job
 
   displayName: Dockerize --> Stage

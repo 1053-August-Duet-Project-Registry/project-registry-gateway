@@ -85,7 +85,7 @@ stages:
           cd $(Build.SourcesDirectory)/project-registry-${{ variables.microservice }} 
           echo use mvn-version to extract the version from pom.xml...
           VARIABLES_VERSION=$(mvn-version .)
-          echo "##vso[task.setvariable variable=variables.version]$VARIABLES_VERSION"
+          echo "##vso[task.setvariable variable=version]$VARIABLES_VERSION"
           echo found version: $(version)
       displayName: Assign version from ${{ variables.microservice }} pom.xml file --> Task
 

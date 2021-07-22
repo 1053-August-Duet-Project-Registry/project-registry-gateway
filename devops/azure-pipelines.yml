@@ -69,28 +69,32 @@ stages:
     steps:
     - checkout: self
     - checkout: templates
-    - task: CmdLine@2
-      inputs:
-        script: |
-          #!/bin/bash
-          echo install dependencies...
-          sudo apt-get install zsh -y
-          sudo apt-get install xmlstarlet -y
-          echo... install mvn-version from temp folder
-          cd $(Build.SourcesDirectory)/project-registry-devops/tools/mvn-version-1.2.1
-          sudo bash autogen.sh
-          sudo ./configure
-          sudo make
-          sudo make install
-          cd $(Build.SourcesDirectory)/project-registry-${{ variables.microservice }} 
-          echo use mvn-version to extract the version from pom.xml...
-          VERSION=$(mvn-version .)
-          echo "##vso[task.setvariable variable=version]$VERSION"
-          echo found version: $(version)
-      displayName: Assign version from ${{ variables.microservice }} pom.xml file --> Task
 
-    - script: echo $(version)
-      displayName: Show extracted version
+    - script: |
+        sudo apt-get install zsh -y
+        sudo apt-get install xmlstarlet -y
+      displayName: Install mvn-version dependencies --> Task
+    
+    - script: |
+        cd $(Build.SourcesDirectory)/project-registry-devops/tools/mvn-version-1.2.1
+        sudo bash autogen.sh
+        sudo ./configure
+        sudo make
+        sudo make install
+      workingDirectory: $(Build.SourcesDirectory)/project-registry-devops/tools/mvn-version-1.2.1
+      displayName: Install mvn-version --> Task
+      
+    - script: |
+        VERSION=$(mvn-version .)
+        echo extracted $VERSION
+        echo "##vso[task.setvariable variable=version]$VERSION"
+        echo exported version: $(version)
+      workingDirectory: cd $(Build.SourcesDirectory)/project-registry-${{ variables.microservice }} 
+      displayName: Extract microservice version from pom.xml file --> Task
+
+    - script: |
+        echo imported version: $(version)
+      displayName: Show cross-script version imported --> Task
 
     displayName: Dockerize --> Job
 

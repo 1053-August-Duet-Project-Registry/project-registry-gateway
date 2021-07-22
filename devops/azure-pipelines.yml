@@ -100,10 +100,17 @@ stages:
       inputs:
         containerRegistry: 'Jacob''s Docker Hub'
         repository: 'project-registry-${{ variables.microservice }}'
-        command: 'buildAndPush'
+        command: 'build'
         Dockerfile: '**/Dockerfile'
         tags: '$(version)'
-      displayName: Dockerize ${{ variables.microservice }}
+      displayName: Dockerize ${{ variables.microservice }} --> Task
+    
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Jacob''s Docker Hub'
+        repository: 'project-registry-${{ variables.microservice }}'
+        command: 'push'
+      displayName: Push ${{ variables.microservice }} to DockerHub --> Task
 
     displayName: Dockerize --> Job
 

@@ -1,6 +1,6 @@
-# This pipeline relies on the analysis.yml template located in the
-# repository resource descibed below
-# The ref: value must point to a branch where the template exists.
+# This pipeline relies on the analysis.yml and dockerize.yml templates 
+# located in the repository resource descibed below
+# The ref: value must point to a branch where both templates exist.
 resources:
   repositories:
   - repository: templates
@@ -39,8 +39,6 @@ pool:
 variables:
 - group: project-registry-sonarcloud
 - group: project-registry-discord
-# - name: version
-#   value: undefined
 
 stages:
 - stage: analyze
@@ -66,7 +64,7 @@ stages:
   displayName: Analyze --> Stage
 
 - stage: dockerize
-  dependsOn: [] # <-- run concurrent with analyze stage
+  dependsOn: [] # <-- run concurrent with analyze stage; does not depend on it
   jobs:
   - job: dockerize
     steps:

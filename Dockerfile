@@ -14,7 +14,10 @@ ENV JAVA_OPTS="${JAVA_OPTS} -Dspring.profiles.active=default"
 WORKDIR /app
 ARG DEPENDENCY=/app
 COPY --from=builder $DEPENDENCY/dependencies/ ./
+RUN true
 COPY --from=builder $DEPENDENCY/snapshot-dependencies/ ./
+RUN true
 COPY --from=builder $DEPENDENCY/spring-boot-loader/ ./
+RUN true
 COPY --from=builder $DEPENDENCY/application/ ./
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom org.springframework.boot.loader.JarLauncher"]

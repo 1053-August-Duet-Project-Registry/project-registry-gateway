@@ -77,6 +77,8 @@ stages:
         containerUrl: https://hub.docker.com/repository/docker/jpbulloch5/project-registry-gateway
         discordChannel: $(discordDockerChannel)
         discordKey: $(discordDockerKey)
+        useDynamicVersion: false
+        version: override-test
         
     displayName: Dockerize --> Job
 

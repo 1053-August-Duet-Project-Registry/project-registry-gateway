@@ -99,7 +99,7 @@ stages:
     - task: Docker@2
       inputs:
         containerRegistry: 'Jacob''s Docker Hub'
-        repository: 'project-registry-${{ variables.microservice }}'
+        repository: 'jpbulloch5/project-registry-${{ variables.microservice }}'
         command: 'build'
         Dockerfile: '**/Dockerfile'
         tags: '$(version)'
@@ -108,7 +108,7 @@ stages:
     - task: Docker@2
       inputs:
         containerRegistry: 'Jacob''s Docker Hub'
-        repository: 'project-registry-${{ variables.microservice }}'
+        repository: 'jpbulloch5/project-registry-${{ variables.microservice }}'
         command: 'push'
         tags: '$(version)'
       displayName: Push ${{ variables.microservice }} to DockerHub --> Task

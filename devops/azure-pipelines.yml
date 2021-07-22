@@ -71,30 +71,38 @@ stages:
     - checkout: templates
 
     - script: |
-        sudo apt-get install zsh -y
-        sudo apt-get install xmlstarlet -y
-      displayName: Install mvn-version dependencies --> Task
-    
-    - script: |
-        cd $(Build.SourcesDirectory)/project-registry-devops/tools/mvn-version-1.2.1
-        sudo bash autogen.sh
-        sudo ./configure
-        sudo make
-        sudo make install
-      workingDirectory: $(Build.SourcesDirectory)/project-registry-devops/tools/mvn-version-1.2.1
-      displayName: Install mvn-version --> Task
-      
-    - script: |
-        VERSION=$(mvn-version .)
-        echo extracted $VERSION
-        echo "##vso[task.setvariable variable=version]$VERSION"
-        echo exported version: $(version)
-      workingDirectory: cd $(Build.SourcesDirectory)/project-registry-${{ variables.microservice }} 
-      displayName: Extract microservice version from pom.xml file --> Task
+        pwd && ls
+        echo
+        cd project-registry-devops && pwd && ls
+        cd tools && pwd && ls
+        cd mvn-version-1.2.1 && pwd && ls
+      displayName: explore filestructure
 
-    - script: |
-        echo imported version: $(version)
-      displayName: Show cross-script version imported --> Task
+    # - script: |
+    #     sudo apt-get install zsh -y
+    #     sudo apt-get install xmlstarlet -y
+    #   displayName: Install mvn-version dependencies --> Task
+    
+    # - script: |
+    #     cd $(Build.SourcesDirectory)/project-registry-devops/tools/mvn-version-1.2.1
+    #     sudo bash autogen.sh
+    #     sudo ./configure
+    #     sudo make
+    #     sudo make install
+    #   workingDirectory: $(Build.SourcesDirectory)/project-registry-devops/tools/mvn-version-1.2.1
+    #   displayName: Install mvn-version --> Task
+      
+    # - script: |
+    #     VERSION=$(mvn-version .)
+    #     echo extracted $VERSION
+    #     echo "##vso[task.setvariable variable=version]$VERSION"
+    #     echo exported version: $(version)
+    #   workingDirectory: cd $(Build.SourcesDirectory)/project-registry-${{ variables.microservice }} 
+    #   displayName: Extract microservice version from pom.xml file --> Task
+
+    # - script: |
+    #     echo imported version: $(version)
+    #   displayName: Show cross-script version imported --> Task
 
     displayName: Dockerize --> Job
 

@@ -14,6 +14,9 @@ ENV JAVA_OPTS="${JAVA_OPTS} -Dspring.profiles.active=default"
 WORKDIR /app
 ARG DEPENDENCY=/app
 COPY --from=builder $DEPENDENCY/dependencies/ ./
+# 'RUN true' is required between COPY commands because Docker decided not to solve the known
+# issue because this is an easy work-around: https://github.com/moby/moby/issues/37965
+#   (yeah, we think it's dumb too, but it works)
 RUN true
 COPY --from=builder $DEPENDENCY/snapshot-dependencies/ ./
 RUN true

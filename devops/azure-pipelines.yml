@@ -89,7 +89,7 @@ stages:
         echo extracted $VERSION
         echo "##vso[task.setvariable variable=version]$VERSION"
         echo exported version: $(version)
-      workingDirectory: cd $(Build.SourcesDirectory)/project-registry-${{ variables.microservice }} 
+      workingDirectory: $(Build.SourcesDirectory)/project-registry-${{ variables.microservice }} 
       displayName: Extract microservice version from pom.xml file --> Task
 
     - script: |

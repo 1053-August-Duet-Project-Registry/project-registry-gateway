@@ -39,6 +39,10 @@ pool:
 variables:
 - group: project-registry-sonarcloud
 - group: project-registry-discord
+- name: microservice
+  value: gateway
+- name: version
+  value: undefined
 
 stages:
 - stage: build
@@ -61,7 +65,34 @@ stages:
 
     displayName: Analyze --> Job
 
-    # Dockerize job goes here
+  - job: dockerize
+    steps:
+    - checkout: self
+    - checkout: templates
+    - task: CmdLine@2
+      inputs:
+        script: |
+          #!/bin/bash
+          echo install dependencies...
+          sudo apt-get install zsh -y
+          sudo apt-get install xmlstarlet -y
+          echo... install mvn-version from temp folder
+          cd $(Build.SourcesDirectory)/project-registry-devops/tools/mvn-version-1.2.1
+          sudo bash autogen.sh
+          sudo ./configure
+          sudo make
+          sudo make install
+          cd $(Build.SourcesDirectory)/project-registry-${{ variables.microservice }} 
+          echo use mvn-version to extract the version from pom.xml...
+          VARIABLES_VERSION=$(mvn-version .)
+          echo "##vso[task.setvariable variable=variables.version]$VARIABLES_VERSION"
+          echo found version: $(variables.version)
+      displayName: Assign version from ${{ variables.microservice }} pom.xml file --> Task
+
+    - script: echo $(variables.version)
+      displayName: Show extracted version
+
+    displayName: Dockerize --> Job
 
   displayName: Build --> Stage
 

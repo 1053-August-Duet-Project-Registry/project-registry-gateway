@@ -16,10 +16,13 @@ spring:
         prefer-ip-address: true
     
     gateway:
+      # CORS shouldn't be an issue in the dev/staging environments,
+      # but this is here so a local instance of the frontend can
+      # connect to the dev cluster
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOrigins: "*"
+            allowedOrigins: "localhost:4200"
             allowedMethods:
             - GET
             - POST

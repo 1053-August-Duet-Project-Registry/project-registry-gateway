@@ -69,8 +69,8 @@ stages:
     - template: ./templates/dockerize.mvn.yml@templates
       parameters:
         imageName: project-registry-gateway
-        containerRepo: May24DevOpsContainers
-        containerServiceConnection: RevatureProject3May24DevOpsContainersACR
+        containerRepo: 'May24DevOpsContainers'
+        containerServiceConnection: 'RevatureProject3May24DevOpsContainersACR'
         containerUrl: PENDING
         discordChannel: $(discordGatewayChannel)
         discordKey: $(discordGatewayKey)

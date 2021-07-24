@@ -71,7 +71,6 @@ stages:
         imageName: project-registry-gateway
         containerRepo: 'May24DevOpsContainers'
         containerServiceConnection: 'acr-team1'
-        containerUrl: PENDING
         discordChannel: $(discordGatewayChannel)
         discordKey: $(discordGatewayKey)
         

@@ -70,7 +70,7 @@ stages:
       parameters:
         imageName: project-registry-gateway
         containerRepo: 'May24DevOpsContainers'
-        containerServiceConnection: 'RevatureProject3May24DevOpsContainersACR'
+        containerServiceConnection: 'acr-team1'
         containerUrl: PENDING
         discordChannel: $(discordGatewayChannel)
         discordKey: $(discordGatewayKey)

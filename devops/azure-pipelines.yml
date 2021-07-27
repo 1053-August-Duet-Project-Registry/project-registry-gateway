@@ -104,7 +104,7 @@ stages:
 
     displayName: Deploy to Dev Cluster --> Job
 
-  - job: deployDev
+  - job: deployStaging
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
     steps:
     - checkout: templates

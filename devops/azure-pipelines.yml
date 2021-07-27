@@ -89,7 +89,7 @@ stages:
   jobs:
 
   - deployment: deployDev
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/branch-dev')
+    # condition: eq(variables['Build.SourceBranch'], 'refs/heads/branch-dev')
     environment: dev
     strategy:
      runOnce:

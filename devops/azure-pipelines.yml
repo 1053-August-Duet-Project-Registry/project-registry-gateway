@@ -99,6 +99,8 @@ stages:
         stagingBranch: 'main'
         namespace: 'team1'
         manifest: 'k8s/microservices/gateway.yml'
+        discordChannel: $(discordGatewayChannel)
+        discordKey: $(discordGatewayKey)
 
     displayName: Deploy --> Job
   displayName: Deploy --> Stage

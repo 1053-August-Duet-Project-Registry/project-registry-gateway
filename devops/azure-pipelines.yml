@@ -106,7 +106,7 @@ stages:
             discordChannel: $(discordGatewayChannel)
             discordKey: $(discordGatewayKey)
 
-    displayName: Deploy to Dev Cluster --> Deployment
+    displayName: Dev Cluster --> Deployment
 
   - deployment: deployStaging
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
@@ -126,6 +126,6 @@ stages:
             discordChannel: $(discordGatewayChannel)
             discordKey: $(discordGatewayKey)
 
-    displayName: Deploy to Staging Cluster --> Deployment
+    displayName: Staging Cluster --> Deployment
 
   displayName: Deploy --> Stage

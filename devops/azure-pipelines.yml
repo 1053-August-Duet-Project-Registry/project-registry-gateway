@@ -80,27 +80,44 @@ stages:
   displayName: Dockerize --> Stage
 
 - stage: deploy
+  # skip deployment on pull requests.  When the pull request is approved, the
+  # resulting commit will trigger the pull request
+  condition: ne(variables['Build.Reason'],'PullRequest')
   dependsOn:
   - analyze
   - dockerize
   jobs:
 
-  - job: deploy
-
+  - job: deployDev
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/branch-dev')
     steps:
     - checkout: templates
 
     - template: ./templates/deploy.yml@templates
       parameters:
         containerRegistry: 'acr-team1'
-        devCluster: 'k8s-team1-config-dev'
-        stagingCluster: 'k8s-team1-config-staging'
-        devBranch: 'branch-dev'
-        stagingBranch: 'main'
+        cluster: 'k8s-team1-config-dev'
         namespace: 'team1'
         manifest: 'k8s/microservices/gateway.yml'
         discordChannel: $(discordGatewayChannel)
         discordKey: $(discordGatewayKey)
 
-    displayName: Deploy --> Job
+    displayName: Deploy to Dev Cluster --> Job
+
+  - job: deployDev
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+    steps:
+    - checkout: templates
+
+    - template: ./templates/deploy.yml@templates
+      parameters:
+        containerRegistry: 'acr-team1'
+        cluster: 'k8s-team1-config-staging'
+        namespace: 'team1'
+        manifest: 'k8s/microservices/gateway.yml'
+        discordChannel: $(discordGatewayChannel)
+        discordKey: $(discordGatewayKey)
+
+    displayName: Deploy to Staging Cluster --> Job
+    
   displayName: Deploy --> Stage

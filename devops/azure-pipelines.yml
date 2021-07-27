@@ -93,18 +93,18 @@ stages:
     environment: dev
     strategy:
      runOnce:
-       deploy:
-        steps:
-        - checkout: templates
+        deploy:
+          steps:
+          - checkout: templates
 
-        - template: ./templates/deploy.yml@templates
-          parameters:
-            containerRegistry: 'acr-team1'
-            cluster: 'k8s-team1-config-dev'
-            namespace: 'team1'
-            manifest: 'k8s/microservices/gateway.yml'
-            discordChannel: $(discordGatewayChannel)
-            discordKey: $(discordGatewayKey)
+          - template: ./templates/deploy.yml@templates
+            parameters:
+              containerRegistry: 'acr-team1'
+              cluster: 'k8s-team1-config-dev'
+              namespace: 'team1'
+              manifest: 'k8s/microservices/gateway.yml'
+              discordChannel: $(discordGatewayChannel)
+              discordKey: $(discordGatewayKey)
 
     displayName: Dev Cluster --> Deployment
 

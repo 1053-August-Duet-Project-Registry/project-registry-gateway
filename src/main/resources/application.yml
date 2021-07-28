@@ -8,9 +8,17 @@ spring:
       discovery:
         enabled: true
         service-id: config
-    
+
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        prefer-ip-address: true
     
     gateway:
+      # CORS shouldn't be an issue in the dev/staging environments,
+      # but this is here so a local instance of the frontend can
+      # connect to the dev cluster
       globalcors:
         corsConfigurations:
           '[/**]':
@@ -24,16 +32,16 @@ spring:
             - content-type
       routes:
         - id: account
-          uri: http://localhost:8081/
+          uri: lb://account-microservice
           predicates:
             - Path=/api/account/**
         
         - id: project
-          uri: http://localhost:8082/
+          uri: lb://project-microservice
           predicates:
             - Path=/api/project/**, /api/organization/**, /api/tag/**
         
         - id: tracking
-          uri: http://localhost:8083/
+          uri: lb://tracking-microservice
           predicates:
             - Path=/api/status**, /api/phase/**,/api/iteration/**

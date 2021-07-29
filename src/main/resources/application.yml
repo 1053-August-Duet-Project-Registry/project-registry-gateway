@@ -14,7 +14,7 @@ spring:
       port: 8500
       discovery:
         prefer-ip-address: true
-    
+
     gateway:
       # CORS shouldn't be an issue in the dev/staging environments,
       # but this is here so a local instance of the frontend can
@@ -32,16 +32,22 @@ spring:
             - content-type
       routes:
         - id: account
-          uri: lb://account-microservice
+          # 8081
+          # uri: lb://account-microservice
+          uri: http://localhost:8081
           predicates:
             - Path=/api/account/**
-        
+
         - id: project
-          uri: lb://project-microservice
+          # 8082
+          # uri: lb://project-microservice
+          uri: http://localhost:8082
           predicates:
             - Path=/api/project/**, /api/organization/**, /api/tag/**
-        
+
         - id: tracking
-          uri: lb://tracking-microservice
+          # 8083
+          # uri: lb://tracking-microservice
+          uri: http://localhost:8083
           predicates:
             - Path=/api/status/**, /api/phase/**,/api/iteration/**

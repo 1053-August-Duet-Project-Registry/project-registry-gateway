@@ -44,4 +44,4 @@ spring:
         - id: tracking
           uri: lb://tracking-microservice
           predicates:
-            - Path=/api/status**, /api/phase/**,/api/iteration/**
+            - Path=/api/status/**, /api/phase/**,/api/iteration/**

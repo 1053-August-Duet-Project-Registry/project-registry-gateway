@@ -50,4 +50,4 @@ spring:
           # uri: lb://tracking-microservice
           uri: http://localhost:8083
           predicates:
-            - Path=/api/status**, /api/phase/**,/api/iteration/**
+            - Path=/api/status/**, /api/phase/**,/api/iteration/**

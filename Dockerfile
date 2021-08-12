@@ -2,7 +2,7 @@ FROM maven:3.6.3-jdk-11-slim as builder
 WORKDIR /app
 COPY . .
 RUN mvn clean package spring-boot:repackage -DskipTests=true
-RUN cp target/gateway-0.0.1-SNAPSHOT.jar app.jar
+RUN cp target/app.jar app.jar
 RUN java -Djarmode=layertools -jar app.jar extract
 
 FROM adoptopenjdk:11-jre-hotspot
